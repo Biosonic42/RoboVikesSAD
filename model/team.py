@@ -17,8 +17,8 @@ class _TeamInfo(object):
         self.hangSuccess = []       # list holding the success of hang for each match
         self.timesHanged = 0        # the number of matches for which the team hanged successfully
         self.attemptedHang = 0      # the number of matches for which the team attempted to hang
-        self.SupportsBot = []       # list holding the state of whether this robot supported another or not (by match)
-        self.ScoredOnPyr = []       # list holding the state of whether this robot scored while hanging from the pyramid or not (by match)
+        self.supportsBot = []       # list holding the state of whether this robot supported another or not (by match)
+        self.scoredOnPyr = []       # list holding the state of whether this robot scored while hanging from the pyramid or not (by match)
         self.numOff = 0             # the number of matches for which the team played offensively
         self.numDef = 0             # the number of matches for which the team played defensively
         self.numAst = 0             # the number of matches for which the team played assistively
@@ -53,6 +53,21 @@ class _TeamInfo(object):
         self.hadYellow = 0          # the number of matches for which a team incurred a yellow card
         self.hadRed = 0             # the number of matches for which a team incurred a red card
 
+    def get_more_info(self):
+        self.timesHanged = float(sum(self.hangSuccess))
+        for var in self.hangSuccess:
+            if var == 0:
+                self.attemptedHang += 1     
+        self.hangsSucctoAtt = self.timesHanged/self.attemptedHang \
+                                if self.attemptedHang else 0
+        self.totalSupportsBot = float(sum(self.supportsBot))
+        self.totalScoredOnPyr = float(sum(self.scoredOnPyr))
+        self.discsPUtoScored = sum(self.discsPU)/sum(self.teleDiscsScored) \
+                                if sum(self.teleDiscsScored)>0 else 0
+
+    def getAttr(self, source):
+        return getattr(self, source)
+
 #------------------------------------------------------------------------------
 # TeamScores Class
 #   -- stores data about a team's scores
@@ -74,6 +89,67 @@ class _TeamScores(object):
         self.autoScores = []        # list holding auto scores
         self.teleScores = []        # list holding tele scores
         self.foulScores = []        # list holding foul scores
+
+        self.maxOffScore = 0
+        self.minOffScore = 0
+        self.maxDefScore = 0
+        self.minDefScore = 0
+        self.maxAstScore = 0
+        self.minAstScore = 0
+        self.maxTotalScore = 0
+        self.minTotalScore = 0
+        self.maxTAScore = 0
+        self.minTAScore = 0
+        self.maxHangScore = 0
+        self.minHangScore = 0
+        self.maxAutoScore = 0
+        self.minAutoScore = 0
+        self.maxTeleScore = 0
+        self.minTeleScore = 0
+        self.maxFoulScore = 0
+        self.minFoulScore = 0
+
+    def get_maxmin_scores(self):
+        for score in self.oScores:
+            self.maxOffScore = score if score > self.maxOffScore else self.maxOffScore
+            self.minOffScore = score if score < self.minOffScore else self.minOffScore
+        for score in self.dScores:
+            self.maxDefScore = score if score > self.maxDefScore else self.maxDefScore
+            self.minDefScore = score if score < self.minDefScore else self.minDefScore
+        for score in self.oScores:
+            self.maxAstScore = score if score > self.maxAstScore else self.maxAstScore
+            self.minAstScore = score if score < self.minAstScore else self.minAstScore
+        for score in self.tScores:
+            self.maxTotalScore = score if score > self.maxTotalScore else self.maxTotalScore
+            self.minTotalScore = score if score < self.minTotalScore else self.minTotalScore
+        for score in self.taScores:
+            self.maxTAScore = score if score > self.maxTAScore else self.maxTAScore
+            self.minTAScore = score if score < self.minTAScore else self.minTAScore
+        for score in self.hangScores:
+            self.maxHangScore = score if score > self.maxHangScore else self.maxHangScore
+            self.minHangScore = score if score < self.minHangScore else self.minHangScore
+        for score in self.autoScores:
+            self.maxAutoScore = score if score > self.maxAutoScore else self.maxAutoScore
+            self.minAutoScore = score if score < self.minAutoScore else self.minAutoScore
+        for score in self.teleScores:
+            self.maxTeleScore = score if score > self.maxTeleScore else self.maxTeleScore
+            self.minTeleScore = score if score < self.minTeleScore else self.minTeleScore
+        for score in self.foulScores:
+            self.maxFoulScore = score if score > self.maxFoulScore else self.maxFoulScore
+            self.minFoulScore = score if score < self.minFoulScore else self.minFoulScore
+
+    def get_avg_scores(self, matches=1, offensive=0, defensive=0, assitive=0, hangs=0, auto=0, tele=0):
+        self.avgTeleAutoOff = sum(self.taScores)/matches if offensive else 0
+        self.avgOffScore = sum(self.oScores)/matches if offensive else 0
+        self.avgDefScore = sum(self.dScores)/matches if defensive else 0
+        self.avgAstScore = sum(self.aScores)/matches if assistive else 0
+        self.avgHangScore = sum(self.hangScores)/hangs if hangs else 0
+        self.avgAutoScore = sum(self.autoScores)/auto if auto else 0
+        self.avgTeleScore = sum(self.teleScores)/tele if tele else 0
+
+    def getAttr(self, source):
+        return getattr(self, source)
+        
 
 #------------------------------------------------------------------------------
 # TeamPitInfo Class
@@ -99,6 +175,9 @@ class _TeamPitInfo(object):
         self.experince2 = None      # ''
         self.Driver3 = ""           # ''
         self.experince3 = None      # ''
+
+    def getAttr(self, source):
+        return getattr(self, source)
   
 #------------------------------------------------------------------------------
 # Team Class
@@ -114,3 +193,18 @@ class Team(object):
         self.Info = _TeamInfo()
         self.Scores = _TeamScores()
         self.PitInfo = _TeamPitInfo()
+        self.team_list.append(self)
+
+    def get_details(self): # gets the intermediate values of Team
+        self.Info.get_more_info()
+        self.Scores.get_maxmin_scores()
+        self.Scores.get_avg_scores(len(self.Info.matches),
+                                   self.Info.numOff, self.Info.numDef, self.Info.numAst,
+                                   self.Info.timesHanged,
+                                   self.Info.hadAuto, self.Info.hadTele)
+
+    # def get_values(self): # gets the values to be displayed in the TeamData window
+        # still to be completed
+
+    def getAttr(self, source):
+        return getattr(self, source)
