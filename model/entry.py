@@ -12,6 +12,8 @@
 class Entry(object):
     """Pull in loaded data and sort it to be later assigned to team values."""
 
+    entries = [] # list holding all the entries, 6 per match
+    
     def __init__(self, data):
         # general info
         self.match = data[0]
@@ -57,6 +59,8 @@ class Entry(object):
                                 self.teleLowDiscs)
         self.teleDiscsPU = self.teleFloorDiscsPU + self.teleStationDiscsPU
 
+        self.entries.append(self)
+
     def primary_sort(self):
         """Calculates basic scoring and information."""
 
@@ -96,3 +100,43 @@ class Entry(object):
                            self.assistiveScore - self.foulScore)
         self.totalTAScore = (self.teleautoScore +
                              self.defensiveScore + self.assistiveScore)
+
+#------------------------------------------------------------------------------
+# PitEntry class
+#   -- stores information about a specific team, robot chassis info, etc.
+#   -- does not have to do with performance on the field
+#   -- most recent data is from 2012, commenting out any game specific data
+#------------------------------------------------------------------------------
+class PitEntry(object):
+    """Stores data not dealing with performance to be transfered to a team."""
+
+    entries = [] # list holding all the pit entries
+    
+    def __init__(self,data):
+        self.team = data[0]
+
+        self.robLength = data[1]
+        self.robWidth = data[2]
+        self.robHeight = data[3]
+        self.robWieght = data[4]
+        self.clearance = data[5]
+        self.wheelSpace = data[6]
+
+        ##self.BrdgMech = data[7]
+        ##self.SlideBrdg = data[8]
+        ##self.balsensor = data[9]
+        self.driveSystem = data[7]
+        self.shiftGear = data[8]
+
+        self.centerMass = data[9]
+
+        self.driver1 = data[10]
+        self.exp1 = data[11]
+
+        self.driver2 = data[12]
+        self.exp2 = data[13]
+
+        self.driver3 = data[14]
+        self.exp3 = data[15]
+
+        self.entries.append(self)
