@@ -73,11 +73,13 @@ class _TeamInfo(object):
         self.avgDiscsPU = sum(self.discsPU)/len(self.discsPU) if len(self.discsPU) else 0
         self.avgFloorDiscsPU = sum(self.teleFloorDiscsPU)/len(self.teleFloorDiscsPU) if len(self.teleFloorDiscsPU) else 0
         self.avgStationDiscsPU = sum(self.teleStationDiscsPU)/len(self.teleStationDiscsPU) if len(self.teleStationDiscsPU) else 0
-        team.avgDiscsScored = sum(team.teleDiscsScored)/len(team.teleDiscsScored) if len(team.teleDiscsScored)>0 else 0
-        team.avgTelePyrScored = sum(team.telePyrScored)/team.hadTele if team.hadTele else 0
-        team.avgTeleTopScored = sum(team.teleTopScored)/team.hadTele if team.hadTele else 0
-        team.avgTeleMidScored = sum(team.teleMidScored)/team.hadTele if team.hadTele else 0
-        team.avgTeleLowScored = sum(team.teleLowScored)/team.hadTele if team.hadTele else 0
+        self.avgDiscsScored = sum(self.teleDiscsScored)/len(self.teleDiscsScored) if len(team.teleDiscsScored)>0 else 0
+        self.avgTelePyrScored = sum(self.telePyrScored)/self.hadTele if self.hadTele else 0
+        self.avgTeleTopScored = sum(self.teleTopScored)/self.hadTele if self.hadTele else 0
+        self.avgTeleMidScored = sum(self.teleMidScored)/self.hadTele if self.hadTele else 0
+        self.avgTeleLowScored = sum(self.teleLowScored)/self.hadTele if self.hadTele else 0
+        self.avgRegFoul = sum(self.RegFouls)/self.hadRegFoul if self.hadRegFoul else 0
+        self.avgTechFoul = sum(self.TechFoul)/self.hadTechFoul if self.hadTechFoul else 0
         
     def getAttr(self, source):
         return getattr(self, source)
@@ -213,11 +215,14 @@ class _TeamPitInfo(object):
         self.robWidth= 0            # the width  of the robot's chassis
         self.robHeight = 0          # the height of the robot
         self.robWeight = 0          # the weight of the robot
-        self.clearance = ""         # the distance to the floor from the bottom of the chassis
-        self.wheelSpace = ""        # the spacing between the wheels width-wise
+        self.clearance = 0          # the distance to the floor from the bottom of the chassis
+        self.wheelSpace = 0         # the spacing between the wheels width-wise
+        self.driveSystem = ""       # what type of control the robot uses to drive
+                                    # 0 = tank, 1 = arcade, 2 = swerve, 3 = crab, 4 = other
         self.shiftGear = ""         # if the robot has multiple gear drive
-        self.driveSystem = ""       # what type of control the robot uses to drive (tank, arcade, etc.)
+                                    # 0 = no, 1 = yes
         self.centerMass = ""        # the center of mass / gravity of the robot
+                                    # 0 = low, 1 = mid, 2 = high
         self.driver1 = ""           # the robot's drive team
         self.exp1 = None            # the robot's drive team's experience(in competitions / years)
         self.driver2 = ""           # ''
@@ -228,6 +233,9 @@ class _TeamPitInfo(object):
     def getAttr(self, source):
         return getattr(self, source)
 
+#------------------------------------------------------------------------------
+# TeamRankings class
+#   -- place to store ranking lists, for viewing team ranks
 #------------------------------------------------------------------------------
 class TeamRankings(object):
     """Used to keep track of rankings for each team."""
@@ -264,7 +272,8 @@ class Team(object):
     """Store and recall data on a team from here."""
 
     team_list = []  # list holding all the teams currently loaded in the database
-    available = []
+    available = []  # list holding all the teams not currently selected
+    wanted = []     # list holding all the teams in our wanted list
     
     def __init__(self, num):
         self.number = num
@@ -289,8 +298,54 @@ class Team(object):
         self.Scores.get_avgWeight_scores()
         self.Scores.get_maxmin_scores()
 
-    # def get_final_details(self): # gets the values to be displayed in the TeamData window
-        # still to be completed
+    def get_final_details(self): # gets the values to be displayed in the TeamData window
+        matches = self.Info.matches
+        self.numMatch = len(matches)
+        self.pOff = str(int(100*self.Info.numOff)/len(matches)) + "%"
+        self.pDef = str(int(100*self.Info.numDef)/len(matches)) + "%"
+        self.pAst = str(int(100*self.Info.numAst)/len(matches)) + "%"
+        self.avgOff = round(self.Scores.avgOffScore,2)
+        self.avgDef = round(self.Scores.avgDefScore,2)
+        self.avgAst = round(self.Scores.avgAstScore,2)
+        self.avgTotal = round(self.Scores.avgTotalScore,2)
+        self.WeightedOff = round(self.Scores.avgWOScore,2)
+        self.WeightedDef = round(self.Scores.avgWDScore,2)
+        self.WeightedAst = round(self.Scores.avgWAScore,2)
+        self.WeightedTotal = round(self.Scores.avgWScore,2)
+
+        self.pHadAuto = str(int(100*self.Info.hadAuto)/len(matches)) + "%"
+        self.pStartInZone = str(int(100*self.Info.startedInAuto)/len(matches)) + "%"
+        self.pOtherStrat = str(int(100*self.Info.otherAutoStrat)/len(matches)) + "%"
+        self.avgAutoScore = round(self.Scores.avgAutoScore,2)
+        self.avgAutoTopDiscs = round(self.Info.avgAutoTopScored,2)
+        self.avgAutoMidDiscs = round(self.Info.avgAutoMidScored,2)
+        self.avgAutoLowDiscs = round(self.Info.avgAutoLowScored,2)
+        self.avgAutoDiscsPU = round(self.Info.avgAutoDiscsPU,2)
+
+        self.pWasDisabled = str(int(100*self.Info.disabled)/len(matches)) + "%"
+        self.avgDisabled = str(sum(self.Info.disabledState)/len(self.disabledState))
+        self.totalDisabled = self.Info.disabledCount
+        self.avgTotalPickUp = round(self.Info.avgDiscsPU,2)
+        self.avgFloorPickUp = round(self.Info.avgFloorDiscsPU,2)
+        self.avgStationPickUp = round(self.Info.avgStationDiscsPU,2)
+        self.avgTeleScore = round(self.Scores.avgTeleScore,2)
+        self.avgTelePyrDiscs = round(self.Info.avgTelePyrScored,2)
+        self.avgTeleTopDiscs = round(self.Info.avgTeleTopScored,2)
+        self.avgTeleMidDiscs = round(self.Info.avgTeleMidScored,2)
+        self.avgTeleLowDiscs = round(self.Info.avgTeleLowScored,2)
+
+        self.avgHangScore = round(self.Scores.avgHangScore,2)
+        self.rHangSuccToAtt = str(round(self.Info.hangsSucctoAtt,2)) + " : 1"
+        self.pHanged = str(int(100*self.Info.timesHanged)/len(matches)) + "%"
+        self.avgSupportBot = round(sum(self.Info.supportsBot)/len(self.Info.supportsBot),2)
+        self.avgScoredOnPyr = round(sum(self.Info.scoredOnPyr)/len(self.Info.scoredOnPyr),2)
+
+        self.avgRegFoul = round(self.Info.avgRegFoul,2)
+        self.avgTechFoul = round(self.Info.avgTechFoul,2)
+        self.pDefensive = str(int(100*self.Info.defensive)/len(matches)) + "%"
+        self.pAssistive = str(int(100*self.Info.assistive)/len(matches)) + "%"
+        self.pYellow = str(int(100*self.Info.hadYellow)/len(matches)) + "%"
+        self.pRed = str(int(100*self.Info.hadRed)/len(matches)) + "%"
 
     def getAttr(self, source):
         return getattr(self, source)

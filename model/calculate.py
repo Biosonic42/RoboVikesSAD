@@ -11,6 +11,7 @@ from match import *
 #   -- handles data and stores it to the teams
 #------------------------------------------------------------------------------
 def calculate_data():
+    
     for entry in Entry.entries:
         entry.primary_sort()
 
@@ -231,6 +232,7 @@ def assign_basic_match_values(match, entry):
 #   -- still needs error handling
 #------------------------------------------------------------------------------
 def assign_pit_entry_values(team, entry):
+    
     team.PitInfo.robLength = entry.robLength
     team.PitInfo.robWidth = entry.robWidth
     team.PitInfo.robHeight = entry.robHeight
@@ -238,13 +240,14 @@ def assign_pit_entry_values(team, entry):
     team.PitInfo.clearance = entry.clearance
     team.PitInfo.wheelSpace = entry.wheelSpace
     team.PitInfo.driveSystem = entry.driveSystem
+    team.PitInfo.shiftGear = entry.shiftGear
     team.PitInfo.centerMass = entry.centerMass
     team.PitInfo.driver1 = entry.driver1
-    team.PitInfo.exp1 = entry.exp1
+    team.PitInfo.exp1 = entry.exp1 + " Competitions"
     team.PitInfo.driver2 = entry.driver2
-    team.PitInfo.exp2 = entry.exp2
-    team.PitInfo.drivre3 = entry.driver3
-    team.PitInfo.exp3 = entry.exp3
+    team.PitInfo.exp2 = entry.exp2 + " Competitions"
+    team.PitInfo.driver3 = entry.driver3
+    team.PitInfo.exp3 = entry.exp3 + " Competitions"
 
 #------------------------------------------------------------------------------
 # get_rank functions
