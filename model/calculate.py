@@ -18,8 +18,8 @@ def calculate_data():
     # get basic team data from the entries
     for entry in Entry.entries:
         done = False
-        for team in Teams.team_list:
-            if team.number == entry.Team:
+        for team in Team.team_list:
+            if team.number == entry.team:
                 assign_basic_team_values(team, entry)
 
                 done = True
@@ -65,8 +65,15 @@ def calculate_data():
                         allOff = match.offScore1
                         allDef = match.def1
                         allAst = match.ast1
+        else:
+            oppAvg = 0
+            oppOff = 0
+            allAvg = 0
+            allOff = 0
+            allDef = 0
+            allAst = 0
 
-            entry.secondary_sort(oppAvg,oppOff,allAvg,allOff,allDef,allAst)
+        entry.secondary_sort(oppAvg,oppOff,allAvg,allOff,allDef,allAst)
 
         # get total score for the entry
         entry.tertiary_sort()
@@ -75,8 +82,8 @@ def calculate_data():
     for entry in Entry.entries:
         for team in Team.team_list:
             if team.number == entry.team:
-                team.dScores.append(entry.defensiveScore)
-                team.aScores.append(entry.assistiveScore)
+                team.Scores.dScores.append(entry.defensiveScore)
+                team.Scores.aScores.append(entry.assistiveScore)
     for team in Team.team_list:
         team.get_secondary_details()
 
@@ -126,6 +133,7 @@ def calculate_data():
                 team.Scores.tScores.append(entry.totalScore)
 
         team.get_tertiary_details()
+        team.get_final_details()
         
 #------------------------------------------------------------------------------
 # calculate_pit_data function
@@ -204,7 +212,7 @@ def assign_basic_match_values(match, entry):
     match.teams.append(entry.team)
     if entry.allianceColor == 0:
         match.all0.append(entry.team)
-        match.offScore += entry.offensiveScore
+        match.offScore0 += entry.offensiveScore
         match.off0 += int(entry.offensive)
         match.def0 += int(entry.defensive)
         match.ast0 += int(entry.assistive)

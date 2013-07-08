@@ -70,7 +70,7 @@ def parse_data(info):
     i = 0
     new = ""
     while i < 27:
-        for charater in info:
+        for character in info:
             if character != "," and character != "\n":
                 new += str(character)
             else:

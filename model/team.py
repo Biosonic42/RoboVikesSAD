@@ -67,19 +67,19 @@ class _TeamInfo(object):
     def get_final_info(self):
         self.avgAutoDiscsScored = sum(self.autoDiscsScored)/len(self.autoDiscsScored) if len(self.autoDiscsScored) else 0
         self.avgAutoDiscsPU = sum(self.autoDiscsPU)/len(self.autoDiscsPU) if len(self.autoDiscsPU) else 0
-        self.avgAutoTopScored = sum(self.autoTopScored)/team.hadAuto if self.hadAuto else 0
-        self.avgAutoMidScored = sum(self.autoMidScored)/team.hadAuto if self.hadAuto else 0
-        self.avgAutoLowScored = sum(self.autoLowScored)/team.hadAuto if self.hadAuto else 0
+        self.avgAutoTopScored = sum(self.autoTopScored)/self.hadAuto if self.hadAuto else 0
+        self.avgAutoMidScored = sum(self.autoMidScored)/self.hadAuto if self.hadAuto else 0
+        self.avgAutoLowScored = sum(self.autoLowScored)/self.hadAuto if self.hadAuto else 0
         self.avgDiscsPU = sum(self.discsPU)/len(self.discsPU) if len(self.discsPU) else 0
         self.avgFloorDiscsPU = sum(self.teleFloorDiscsPU)/len(self.teleFloorDiscsPU) if len(self.teleFloorDiscsPU) else 0
         self.avgStationDiscsPU = sum(self.teleStationDiscsPU)/len(self.teleStationDiscsPU) if len(self.teleStationDiscsPU) else 0
-        self.avgDiscsScored = sum(self.teleDiscsScored)/len(self.teleDiscsScored) if len(team.teleDiscsScored)>0 else 0
+        self.avgDiscsScored = sum(self.teleDiscsScored)/len(self.teleDiscsScored) if len(self.teleDiscsScored)>0 else 0
         self.avgTelePyrScored = sum(self.telePyrScored)/self.hadTele if self.hadTele else 0
         self.avgTeleTopScored = sum(self.teleTopScored)/self.hadTele if self.hadTele else 0
         self.avgTeleMidScored = sum(self.teleMidScored)/self.hadTele if self.hadTele else 0
         self.avgTeleLowScored = sum(self.teleLowScored)/self.hadTele if self.hadTele else 0
         self.avgRegFoul = sum(self.RegFouls)/self.hadRegFoul if self.hadRegFoul else 0
-        self.avgTechFoul = sum(self.TechFoul)/self.hadTechFoul if self.hadTechFoul else 0
+        self.avgTechFoul = sum(self.TechFouls)/self.hadTechFoul if self.hadTechFoul else 0
         
     def getAttr(self, source):
         return getattr(self, source)
@@ -169,7 +169,7 @@ class _TeamScores(object):
         for score in self.woScores:
             if self.minWOScore == 0: self.minWOScore = score
             self.maxWOScore = score if score > self.maxWOScore else self.maxWOScore
-            self.minWOScore = score if score < self.minWOScore else self.minWSOcore
+            self.minWOScore = score if score < self.minWOScore else self.minWOScore
         for score in self.wdScores:
             if self.minWDScore == 0: self.minWDScore = score
             self.maxWDScore = score if score > self.maxWDScore else self.maxWDScore
@@ -187,7 +187,7 @@ class _TeamScores(object):
         self.avgTeleScore = sum(self.teleScores)/tele if tele else 0
         self.avgFoulScore = sum(self.foulScores)/matches if matches else 0
 
-    def get_avgDefAst_scores(self, matches=1, defensive=0, assitive=0):
+    def get_avgDefAst_scores(self, matches=1, defensive=0, assistive=0):
         self.avgDefScore = sum(self.dScores)/matches if defensive else 0
         self.avgAstScore = sum(self.aScores)/matches if assistive else 0
 
@@ -323,7 +323,7 @@ class Team(object):
         self.avgAutoDiscsPU = round(self.Info.avgAutoDiscsPU,2)
 
         self.pWasDisabled = str(int(100*self.Info.disabled)/len(matches)) + "%"
-        self.avgDisabled = str(sum(self.Info.disabledState)/len(self.disabledState))
+        self.avgDisabled = str(sum(self.Info.disabledState)/len(self.Info.disabledState))
         self.totalDisabled = self.Info.disabledCount
         self.avgTotalPickUp = round(self.Info.avgDiscsPU,2)
         self.avgFloorPickUp = round(self.Info.avgFloorDiscsPU,2)
@@ -342,8 +342,8 @@ class Team(object):
 
         self.avgRegFoul = round(self.Info.avgRegFoul,2)
         self.avgTechFoul = round(self.Info.avgTechFoul,2)
-        self.pDefensive = str(int(100*self.Info.defensive)/len(matches)) + "%"
-        self.pAssistive = str(int(100*self.Info.assistive)/len(matches)) + "%"
+        self.pDefensive = str(int(100*self.Info.numDef)/len(matches)) + "%"
+        self.pAssistive = str(int(100*self.Info.numAst)/len(matches)) + "%"
         self.pYellow = str(int(100*self.Info.hadYellow)/len(matches)) + "%"
         self.pRed = str(int(100*self.Info.hadRed)/len(matches)) + "%"
 
