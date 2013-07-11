@@ -106,81 +106,36 @@ class _TeamScores(object):
         self.teleScores = []        # list holding tele scores
         self.foulScores = []        # list holding foul scores
 
-        self.maxOffScore = self.minOffScore = 0
-        self.maxDefScore = self.minDefScore = 0
-        self.maxAstScore = self.minAstScore = 0
-        self.maxTotalScore = self.minTotalScore = 0
-        self.maxTAScore = self.minTAScore = 0
-        self.maxHangScore = self.minHangScore = 0
-        self.maxAutoScore = self.minAutoScore = 0
-        self.maxTeleScore = self.minTeleScore = 0
-        self.maxFoulScore = self.minFoulScore = 0
-        self.maxTAScore = self.minTAScore = 0
-        self.maxWScore = self.minWScore = 0
-        self.maxWOScore = self.minWOScore = 0
-        self.maxWDScore = self.minWDScore = 0
-        self.maxWAScore = self.minWAScore = 0
-
     def get_maxmin_scores(self):
-        for score in self.oScores:
-            if self.minOffScore == 0: self.minOffScore = score
-            self.maxOffScore = score if score > self.maxOffScore else self.maxOffScore
-            self.minOffScore = score if score < self.minOffScore else self.minOffScore
-        for score in self.dScores:
-            if self.minDefScore == 0: self.minDefScore = score
-            self.maxDefScore = score if score > self.maxDefScore else self.maxDefScore
-            self.minDefScore = score if score < self.minDefScore else self.minDefScore
-        for score in self.aScores:
-            if self.minAstScore == 0: self.minAstScore = score
-            self.maxAstScore = score if score > self.maxAstScore else self.maxAstScore
-            self.minAstScore = score if score < self.minAstScore else self.minAstScore
-        for score in self.tScores:
-            if self.minTotalScore == 0: self.minTotalScore = score
-            self.maxTotalScore = score if score > self.maxTotalScore else self.maxTotalScore
-            self.minTotalScore = score if score < self.minTotalScore else self.minTotalScore
-        for score in self.taScores:
-            if self.minTAScore == 0: self.minTAScore = score
-            self.maxTAScore = score if score > self.maxTAScore else self.maxTAScore
-            self.minTAScore = score if score < self.minTAScore else self.minTAScore
-        for score in self.hangScores:
-            if self.minHangScore == 0: self.minHangScore = score
-            self.maxHangScore = score if score > self.maxHangScore else self.maxHangScore
-            self.minHangScore = score if score < self.minHangScore else self.minHangScore
-        for score in self.autoScores:
-            if self.minAutoScore == 0: self.minAutoScore = score
-            self.maxAutoScore = score if score > self.maxAutoScore else self.maxAutoScore
-            self.minAutoScore = score if score < self.minAutoScore else self.minAutoScore
-        for score in self.teleScores:
-            if self.minTeleScore == 0: self.minTeleScore = score
-            self.maxTeleScore = score if score > self.maxTeleScore else self.maxTeleScore
-            self.minTeleScore = score if score < self.minTeleScore else self.minTeleScore
-        for score in self.foulScores:
-            if self.minFoulScore == 0: self.minFoulScore = score
-            self.maxFoulScore = score if score > self.maxFoulScore else self.maxFoulScore
-            self.minFoulScore = score if score < self.minFoulScore else self.minFoulScore
-        for score in self.taScores:
-            if self.minTAScore == 0: self.minTAScore = score
-            self.maxTAScore = score if score > self.maxTAScore else self.maxTAScore
-            self.minTAScore = score if score < self.minTAScore else self.minTAScore
-        for score in self.wScores:
-            if self.minWScore == 0: self.minWScore = score
-            self.maxWScore = score if score > self.maxWScore else self.maxWScore
-            self.minWScore = score if score < self.minWScore else self.minWScore
-        for score in self.woScores:
-            if self.minWOScore == 0: self.minWOScore = score
-            self.maxWOScore = score if score > self.maxWOScore else self.maxWOScore
-            self.minWOScore = score if score < self.minWOScore else self.minWOScore
-        for score in self.wdScores:
-            if self.minWDScore == 0: self.minWDScore = score
-            self.maxWDScore = score if score > self.maxWDScore else self.maxWDScore
-            self.minWDScore = score if score < self.minWDScore else self.minWDScore
-        for score in self.waScores:
-            if self.minWAScore == 0: self.minWAScore = score
-            self.maxWAScore = score if score > self.maxWAScore else self.maxWAScore
-            self.minWAScore = score if score < self.minWAScore else self.minWAScore
+        self.maxOffScore = max(self.oScores)
+        self.minOffScore = min(self.oScores)
+        self.maxDefScore = max(self.dScores)
+        self.minDefScore = min(self.dScores)
+        self.maxAstScore = max(self.aScores)
+        self.minAstScore = min(self.aScores)
+        self.maxTotalScore = max(self.tScores)
+        self.minTotalScore = min(self.tScores)
+        self.maxWScore = max(self.wScores)
+        self.minWScore = min(self.wScores)
+        self.maxWOScore = max(self.woScores)
+        self.minWOScore = min(self.woScores)
+        self.maxWDScore = max(self.wdScores)
+        self.minWDScore = min(self.wdScores)
+        self.maxWAScore = max(self.waScores)
+        self.minWAScore = min(self.waScores)
+        self.maxTAScore = max(self.taScores)
+        self.minTAScore = min(self.taScores)
+        self.maxHangScore = max(self.hangScores)
+        self.minHangScore = min(self.hangScores)
+        self.maxAutoScore = max(self.autoScores)
+        self.minAutoScore = min(self.autoScores)
+        self.maxTeleScore = max(self.teleScores)
+        self.minTeleScore = min(self.teleScores)
+        self.maxFoulScore = max(self.foulScores)
+        self.minFoulScore = min(self.foulScores)
 
     def get_avgOff_scores(self, matches=1, offensive=0, hangs=0, auto=0, tele=0):
-        self.avgTeleAutoOff = sum(self.taScores)/matches if offensive else 0
+        self.avgTAScore = sum(self.taScores)/matches if offensive else 0
         self.avgOffScore = sum(self.oScores)/matches if offensive else 0
         self.avgHangScore = sum(self.hangScores)/hangs if hangs else 0
         self.avgAutoScore = sum(self.autoScores)/auto if auto else 0

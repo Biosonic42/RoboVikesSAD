@@ -1,14 +1,8 @@
 #------------------------------------------------------------------------------
 # model module
-#   -- imports all other model modules and contains model globals for use
+#   -- contains model globals for use
+#   -- rethinking: perhaps this module is obsolete
 #------------------------------------------------------------------------------
-from calculate import *
-from entry import *
-from imports import *
-from match import *
-from team import *
 
-# globals
-oldFile = None
-Reload = False
 imported = False
+pitImported = False
