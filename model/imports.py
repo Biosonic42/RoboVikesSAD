@@ -7,13 +7,11 @@ from team import *
 from match import *
 import model
 
-import tkFileDialog
-
 #------------------------------------------------------------------------------
 # import_data functions
 #   -- takes data from the user and loads it into the database
 #------------------------------------------------------------------------------
-def import_data():
+def import_data(Filename=""):
 
     model.imported = False
 
@@ -25,9 +23,6 @@ def import_data():
     Match.matches = []
 
     try:
-        Filename = str(tkFileDialog.askopenfilename())
-        print "File Selected"
-
         newData = open(Filename, "r")
         print "File Opened"
     except:
@@ -43,16 +38,13 @@ def import_data():
     except:
         print "Error, could not parse data."
 
-def import_pitData():
+def import_pitData(Filename=""):
 
     model.pitImported = False
     
     PitEntry.entries = []
 
     try:
-        Filename = str(tkFileDialog.askopenfilename())
-        print "File Selected"
-
         newData = open(Filename, "r")
         print "File Opened"
     except:
