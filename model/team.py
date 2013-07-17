@@ -272,6 +272,7 @@ class Team(object):
         self.pStartInZone = str(int(100*self.Info.startedInAuto)/len(matches)) + "%"
         self.pOtherStrat = str(int(100*self.Info.otherAutoStrat)/len(matches)) + "%"
         self.avgAutoScore = round(self.Scores.avgAutoScore,2)
+        self.avgAutoPickUp = round(self.Info.avgAutoDiscsPU,2)
         self.avgAutoTopDiscs = round(self.Info.avgAutoTopScored,2)
         self.avgAutoMidDiscs = round(self.Info.avgAutoMidScored,2)
         self.avgAutoLowDiscs = round(self.Info.avgAutoLowScored,2)

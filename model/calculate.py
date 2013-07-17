@@ -27,7 +27,7 @@ def calculate_data():
             newTeam = Team(entry.team)
             print "Added Team #: " + str(entry.team)
 
-            assign_basic_team_values(Team.team_list[len(Team.team_list)-1],entry)
+            assign_basic_team_values(newTeam,entry)
 
     # get primary offensive information about the team
     for team in Team.team_list:
@@ -44,7 +44,7 @@ def calculate_data():
         if done==False:
             newMatch = Match(entry.match)
             print "Added Match #: " + str(entry.match)
-            assign_basic_match_values(Match.matches[len(Match.matches)-1], entry)
+            assign_basic_match_values(newMatch, entry)
 
     # get defensive and assistive scores for each entry
     for entry in Entry.entries:
@@ -220,7 +220,7 @@ def assign_basic_match_values(match, entry):
         if entry.offensive:
             for team in Team.team_list:
                 if team.number == entry.team:
-                    match.taSum0 += team.Scores.avgTeleAutoOff
+                    match.taSum0 += team.Scores.avgTAScore
                     
     elif entry.allianceColor == 1:
         match.all1.append(entry.team)
@@ -232,7 +232,7 @@ def assign_basic_match_values(match, entry):
         if entry.offensive:
             for team in Team.team_list:
                 if team.number == entry.team:
-                    match.taSum1 += team.Scores.avgTeleAutoOff
+                    match.taSum1 += team.Scores.avgTAScore
 
 #------------------------------------------------------------------------------
 # assign_pit_entry_values function
