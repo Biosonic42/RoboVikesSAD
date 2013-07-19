@@ -85,14 +85,14 @@ class Entry(object):
 
     def secondary_sort(self, oppAvg, oppOff, allAvg, allOff, allDef, allAst):
         """Calculates defensive and assistive score values."""
-        # result = difference between teleauto scores +
-        #          difference between hang scores /
+        # result = difference between teleauto scores (exluding own score) +
+        #          difference between hang scores (exluding own score) /
         #          the number of defensive players
-        self.defensiveScore = ((allAvg - oppAvg) +
-                               ((allOff-allAvg) - (oppOff-oppAvg))) / allDef if self.defensive else 0
+        self.defensiveScore = (((allAvg - self.teleautoScore) - oppAvg) +
+                               (((allOff - self.hangScore) - allAvg) - (oppOff-oppAvg))) / allDef if self.defensive else 0
         # result = alliance's score without team's offensive contribution /
         #          the number of assistive players - team's offensive score
-        self.assistiveScore = (((allOff-self.offensiveScore)/allAst)/3) if self.assistive else 0
+        self.assistiveScore = (((allOff-self.offensiveScore)/allAst)-self.offensiveScore) if self.assistive else 0
 
     def tertiary_sort(self):
         """Calculates total scores."""

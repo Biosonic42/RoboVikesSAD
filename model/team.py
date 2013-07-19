@@ -279,7 +279,7 @@ class Team(object):
         self.avgAutoDiscsPU = round(self.Info.avgAutoDiscsPU,2)
 
         self.pWasDisabled = str(int(100*self.Info.disabled)/len(matches)) + "%"
-        self.avgDisabled = str(sum(self.Info.disabledState)/len(self.Info.disabledState))
+        self.avgDisabled = round((sum(self.Info.disabledState)/len(self.Info.disabledState)),3)
         self.totalDisabled = self.Info.disabledCount
         self.avgTotalPickUp = round(self.Info.avgDiscsPU,2)
         self.avgFloorPickUp = round(self.Info.avgFloorDiscsPU,2)
@@ -298,8 +298,6 @@ class Team(object):
 
         self.avgRegFoul = round(self.Info.avgRegFoul,2)
         self.avgTechFoul = round(self.Info.avgTechFoul,2)
-        self.pDefensive = str(int(100*self.Info.numDef)/len(matches)) + "%"
-        self.pAssistive = str(int(100*self.Info.numAst)/len(matches)) + "%"
         self.pYellow = str(int(100*self.Info.hadYellow)/len(matches)) + "%"
         self.pRed = str(int(100*self.Info.hadRed)/len(matches)) + "%"
 
