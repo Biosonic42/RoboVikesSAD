@@ -7,6 +7,8 @@ from Tkinter import *
 import sys
 sys.path.append("../../")
 from controller.windows import cteamdata
+from view import vlreg
+from controller import clreg
 
 class TeamData(Frame):
     """Class that handles running the window to view data on a team."""
@@ -47,8 +49,51 @@ class TeamData(Frame):
                        ("maxAutoScore","Maximum Auto Score: "),("minAutoScore","Minimum Auto Score: "),
                        ("maxTeleScore","Maximum Tele Score: "),("minTeleScore","Minimum Tele Score: "),
                        ("maxFoulScore","Maximum Foul Score: "),("minFoulScore","Minimum Foul Score: ")]
+
+    graphVals = [("avgOff","Scores","oScores"),("avgDef","Scores","dScores"),
+                 ("avgAst","Scores","aScores"),("avgTotal","Scores","tScores"),
+                 ("WeightedOff","Scores","woScores"),("WeightedDef","Scores","wdScores"),
+                 ("WeightedAst","Scores","waScores"),("WeightedTotal","Scores","wScores"),
+                 ("avgAutoScore","Scores","autoScores"),("avgAutoPickUp","Info","autoDiscsPU"),
+                 ("avgAutoTopDiscs","Info","autoTopScored"),("avgAutoMidDiscs","Info","autoMidScored"),
+                 ("avgAutoLowDiscs","Info","autoLowScored"),("avgDisabled","Info","disabledState"),
+                 ("avgFloorPickUp","Info","teleFloorDiscsPU"),("avgStationPickUp","Info","teleStationDiscsPU"),
+                 ("avgTeleScore","Scores","teleScores"),("avgTelePyrDiscs","Info","telePyrScored"),
+                 ("avgTeleTopDiscs","Info","teleTopScored"),("avgTeleMidDiscs","Info","teleMidScored"),
+                 ("avgTeleLowDiscs","Info","teleLowScored"),("avgHangScore","Scores","hangScores"),
+                 ("avgSupportBot","Info","supportsBot"),("avgScoredOnPyr","Info","scoredOnPyr"),
+                 ("avgRegFoul","Info","RegFouls"),("avgTechFoul","Info","TechFouls")]
     
-    def show(self):
+    def graph_data(self, graphType, event=None):
+        #remove the previous graph to make room for the new one
+        self.graph.destroy()
+        #find the name of the graph out of index
+        typeIndex = None
+        graphData = None
+        try:
+            graphName = self.dataLabelVals[int(graphType[0])][0]  
+        except:
+            graphName = None
+
+        #find the index and attr name
+        for x, y, z in self.graphVals:
+            if x == graphName:
+                typeIndex = y
+                graphData = z
+                break # do not continue to iterate through the list
+    
+        #get the attr value from our Team and make us a copy
+        self.graphData = self.controller.get_GraphData(index=typeIndex, data=graphData)
+        print self.graphData
+
+        if self.graphData:
+            self.graphController = clreg.LregController()
+            self.graph = vlreg.Lreg(self.graphFrame, self.graphData,
+                                    controller=self.graphController)
+            self.graph.pack()
+            self.contents.append(self.graph)
+        
+    def show(self):   
         if self.shown == False:
             #make the frame to show data to
             self.dataFrame = Frame(self, relief=SUNKEN,bd=1)
@@ -71,15 +116,38 @@ class TeamData(Frame):
             #make the listbox and scroller containing information values
             self.scrollbar = Scrollbar(self.dataFrame)
             self.scrollbar.pack(side=RIGHT,fill=Y)
-            self.teamInfo = Listbox(self.dataFrame,height=30,width=50,
+            self.teamData = Listbox(self.dataFrame,height=30,width=50,
                                     yscrollcommand=self.scrollbar.set)
             for x, y in self.dataLabelVals:
                 self.labelVar = str(y) + str(self.controller.data.getAttr(x))
-                self.teamInfo.insert(END, self.labelVar)
-            self.teamInfo.pack(side=RIGHT,fill=Y)
-            self.scrollbar.config(command=self.teamInfo.yview)
-            self.contents.append(self.teamInfo)
+                self.teamData.insert(END, self.labelVar)
+            self.teamData.pack(side=RIGHT,fill=Y)
+            self.teamData.bind("<Double-Button-1>",lambda event: self.graph_data(graphType=self.teamData.curselection()))
+            self.teamData.bind("<Return>",lambda event: self.graph_data(graphType=self.teamData.curselection()))
+            self.scrollbar.config(command=self.teamData.yview)
+            self.contents.append(self.teamData)
             self.contents.append(self.scrollbar)
+
+            # make the frame to show the team pic on
+            self.photoFrame = Frame(self,relief=RAISED,bd=1)
+            self.photoFrame.pack(side=RIGHT,padx=20,pady=10)
+            self.contents.append(self.photoFrame)
+
+            # make the photo
+            self.photoFile = self.controller.get_PhotoImage()
+            self.teamPic = Label(self.photoFrame,image=self.photoFile,width=256,height=192)
+            self.teamPic.pack()
+            self.contents.append(self.teamPic)
+
+            # make the frame to show the graph on
+            self.graphFrame = Frame(self,relief=RAISED,bd=1)
+            self.graphFrame.pack(side=LEFT,padx=20,pady=10)
+            self.contents.append(self.graphFrame)
+
+            # make an empty graph canvas to satisfy the frame
+            self.graph = Canvas(self.graphFrame,width=256,height=192)
+            self.graph.pack()
+            self.contents.append(self.graph)
 
             self.shown = True
 
@@ -87,30 +155,38 @@ class TeamData(Frame):
         if self.shown == True:
             for i in xrange(0,len(self.contents)):
                 self.contents[i].destroy()
+            self.contents = []
             self.shown = False
             
-    def buttonClicked(self):
+    def load(self, event=None):
         if self.controller.loadData():
-            self.hide()
-            self.show()
+            self.hide() # remove the old contents (if there are any)
+            self.show() # display the new ones
         
     def startup(self):
+        # create the frame for team loading
         self.startupFrame = Frame(self)
         self.startupFrame.pack(side=TOP,pady=5)
+
+        # make the team number loading widgets and map commands / bindings
         self.teamNum = StringVar()
-        self.label = Label(self.startupFrame, text="Team # ").pack(side=LEFT,padx=5)
+        self.label = Label(self.startupFrame, text="Team # ")
+        self.label.pack(side=LEFT,padx=5)
+        
         self.entry = Entry(self.startupFrame, textvariable=self.teamNum, width=4)
         self.entry.pack(side=LEFT,padx=5)
+        self.entry.bind("<Return>",self.load)
         self.controller.entry = self.entry
+        
         self.button = Button(self.startupFrame, text="Load Data")
-        self.button.config(command=self.buttonClicked)
+        self.button.config(command=self.load)
         self.button.pack(side=LEFT,padx=5)
-        self.controller.button = self.button
         
     def __init__(self, parent=None, controller=None):
         self.shown = False
         self.contents = []
         self.controller=controller
+        self.graphData = None
         
         parent.title("TeamData")
         Frame.__init__(self, parent)

@@ -1,1 +1,1 @@
-__all__=["portals","windows","controller"]
+__all__=["portals","windows","controller","clreg"]
