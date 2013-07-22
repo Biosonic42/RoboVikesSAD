@@ -11,6 +11,57 @@ from model.team import *
 class TeamDataController():
     """Class that handles commands from the teamdata window."""
 
+    # use these to index values to display, use the system: ("key", "term")
+    # where key corresponds to a value in team and term labels that value
+    dataLabelVals = [("numMatch","Number of Matches: "),
+                 ("pOff","Played Offensive: "),("pDef","Played Defensive: "),("pAst","Played Assistive: "),
+                 ("avgOff","Average Offensive Score: "),("avgDef","Average Defensive Score: "),("avgAst","Average Assistive Score: "),
+                 ("avgTotal","Average Total Score: "),("WeightedOff","Average Weighted Offensive Score: "),
+                 ("WeightedDef","Average Weighted Defensive Score: "),("WeightedAst","Average Weighted Assistive Score: "),
+                 ("WeightedTotal","Average Weighted Total Score: "),
+                 ("pHadAuto","Had Auto Mode: "),("pStartInZone","Started in Auto Zone: "),
+                 ("pOtherStrat","Other Auto Strategy: "),("avgAutoScore","Average Auto Score: "),
+                 ("avgAutoPickUp","Average Auto Discs Picked Up: "),("avgAutoTopDiscs","Average Auto Scored in Top: "),
+                 ("avgAutoMidDiscs","Average Auto Scored in Mid: "),("avgAutoLowDiscs","Average Auto Scored in Low: "),
+                 ("pWasDisabled","Matches/Disabled Percentage: "),("avgDisabled","Average Times Disabled per Match: "),
+                 ("totalDisabled","Number of Times Disabled: "),("avgFloorPickUp","Average Discs Picked Up: "),
+                 ("avgStationPickUp","Average Discs Loaded: "),("avgTeleScore","Average Tele Score: "),
+                 ("avgTelePyrDiscs","Average Tele Scored in Pyramid: "),("avgTeleTopDiscs","Average Tele Scored in Top: "),
+                 ("avgTeleMidDiscs","Average Tele Scored in Middle: "),("avgTeleLowDiscs","Average Tele Scored in Low: "),
+                 ("avgHangScore","Average Hang Score: "),("rHangSuccToAtt","Successful Hangs to Attempts: "),
+                 ("pHanged","Hung from pyramid: "),("avgSupportBot","Average Support of Another Bot while Hanging: "),
+                 ("avgScoredOnPyr","Average Disc Scores while Hanging: "),
+                 ("avgRegFoul","Average Number of Regular Fouls: "),("avgTechFoul","Average Number of Technical Fouls: "),
+                 ("pYellow","Received Yellow Card: "),("pRed","Received Red Card: ")]
+
+    maxminLabelVals = [("maxOffScore","Maximum Offensive Score: "),("minOffScore","Minimum Offensive Score: "),
+                       ("maxDefScore","Maximum Defensive Score: "),("minDefScore","Minimum Defensive Score: "),
+                       ("maxAstScore","Maximum Assistive Score: "),("minAstScore","Minimum Assistive Score: "),
+                       ("maxTotalScore","Maximum Total Score: "),("minTotalScore","Minimum Total Score: "),
+                       ("maxWScore","Maximum Weighted Score: "),("minWScore","Minimum Weighted Score: "),
+                       ("maxWOScore","Maximum Weighted Offensive Score: "),("minWOScore","Minimum Weighted Offensive Score: "),
+                       ("maxWDScore","Maximum Weighted Defensive Score: "),("minWDScore","Minimum Weighted Defensive Score: "),
+                       ("maxWAScore","Maximum Weighted Assistive Score: "),("minWAScore","Minimum Weighted Assistive Score: "),
+                       ("maxTAScore","Maximum TeleAuto Score: "),("minTAScore","Minimum TeleAuto Score: "),
+                       ("maxHangScore","Maximum Hang Score: "),("minHangScore","Minimum Hang Score: "),
+                       ("maxAutoScore","Maximum Auto Score: "),("minAutoScore","Minimum Auto Score: "),
+                       ("maxTeleScore","Maximum Tele Score: "),("minTeleScore","Minimum Tele Score: "),
+                       ("maxFoulScore","Maximum Foul Score: "),("minFoulScore","Minimum Foul Score: ")]
+
+    graphVals = [("avgOff","Scores","oScores"),("avgDef","Scores","dScores"),
+                 ("avgAst","Scores","aScores"),("avgTotal","Scores","tScores"),
+                 ("WeightedOff","Scores","woScores"),("WeightedDef","Scores","wdScores"),
+                 ("WeightedAst","Scores","waScores"),("WeightedTotal","Scores","wScores"),
+                 ("avgAutoScore","Scores","autoScores"),("avgAutoPickUp","Info","autoDiscsPU"),
+                 ("avgAutoTopDiscs","Info","autoTopScored"),("avgAutoMidDiscs","Info","autoMidScored"),
+                 ("avgAutoLowDiscs","Info","autoLowScored"),("avgDisabled","Info","disabledState"),
+                 ("avgFloorPickUp","Info","teleFloorDiscsPU"),("avgStationPickUp","Info","teleStationDiscsPU"),
+                 ("avgTeleScore","Scores","teleScores"),("avgTelePyrDiscs","Info","telePyrScored"),
+                 ("avgTeleTopDiscs","Info","teleTopScored"),("avgTeleMidDiscs","Info","teleMidScored"),
+                 ("avgTeleLowDiscs","Info","teleLowScored"),("avgHangScore","Scores","hangScores"),
+                 ("avgSupportBot","Info","supportsBot"),("avgScoredOnPyr","Info","scoredOnPyr"),
+                 ("avgRegFoul","Info","RegFouls"),("avgTechFoul","Info","TechFouls")]
+    
     def __init__(self):
         self.teamNum = 0
         self.entry = None
