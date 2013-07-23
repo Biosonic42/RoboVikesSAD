@@ -278,6 +278,8 @@ def get_off_rank(sort="avg",rev=True):
 
     TeamRankings.off_rank.sort(reverse=rev)
 
+    return TeamRankings.off_rank
+
 def get_def_rank(sort="avg",rev=True):
 
     TeamRankings.def_rank = []
@@ -294,6 +296,8 @@ def get_def_rank(sort="avg",rev=True):
                 TeamRankings.def_rank.append([team.Scores.minDefScore,team.number])
 
     TeamRankings.def_rank.sort(reverse=rev)
+
+    return TeamRankings.def_rank
 
 def get_ast_rank(sort="avg",rev=True):
 
@@ -312,6 +316,8 @@ def get_ast_rank(sort="avg",rev=True):
 
     TeamRankings.ast_rank.sort(reverse=rev)
 
+    return TeamRankings.ast_rank
+
 def get_tot_rank(sort="avg",rev=True):
 
     TeamRankings.tot_rank = []
@@ -325,6 +331,8 @@ def get_tot_rank(sort="avg",rev=True):
                 TeamRankings.tot_rank.append([team.Scores.minTotalScore,team.number])
 
     TeamRankings.tot_rank.sort(reverse=rev)
+
+    return TeamRankings.tot_rank
 
 def get_auto_rank(sort="avg",rev=True):
 
@@ -343,22 +351,26 @@ def get_auto_rank(sort="avg",rev=True):
 
     TeamRankings.auto_rank.sort(reverse=rev)
 
+    return TeamRankings.auto_rank
+
 def get_tele_rank(sort="avg",rev=True):
 
     TeamRankings.tele_rank = []
     
     for team in Team.team_list:
         if sort == "avg":
-            if team.hadTele > 0:
-                Team.Info.Ranks.tele_rank.append([team.Scores.avgTeleScore,team.number])
+            if team.Info.hadTele > 0:
+                TeamRankings.tele_rank.append([team.Scores.avgTeleScore,team.number])
         elif sort == "max":
-            if team.hadTele > 0:
-                Team.Info.Ranks.tele_rank.append([team.Scores.maxTeleScore,team.number])
+            if team.Info.hadTele > 0:
+                TeamRankings.tele_rank.append([team.Scores.maxTeleScore,team.number])
         elif sort == "min":
-            if team.hadTele > 0:
-                Team.Info.Ranks.tele_rank.append([team.Scores.minTeleScore,team.number])
+            if team.Info.hadTele > 0:
+                TeamRankings.tele_rank.append([team.Scores.minTeleScore,team.number])
 
     TeamRankings.tele_rank.sort(reverse=rev)
+
+    return TeamRankings.tele_rank
 
 def get_pyr_rank(sort="avg",rev=True):
 
@@ -377,6 +389,8 @@ def get_pyr_rank(sort="avg",rev=True):
 
     TeamRankings.pyr_rank.sort(reverse=rev)
 
+    return TeamRankings.pyr_rank
+
 def get_foul_rank(sort="avg",rev=False): # foul rank default from least points to most
 
     TeamRankings.foul_rank = []
@@ -394,6 +408,7 @@ def get_foul_rank(sort="avg",rev=False): # foul rank default from least points t
 
     TeamRankings.foul_rank.sort(reverse=rev)
 
+    return TeamRankings.foul_rank
 
 def get_ta_rank(sort="avg",rev=True):
 
@@ -412,6 +427,8 @@ def get_ta_rank(sort="avg",rev=True):
 
     TeamRankings.ta_rank.sort(reverse=rev)
 
+    return TeamRankings.ta_rank
+
 def get_w_rank(sort="avg",rev=True):
 
     TeamRankings.w_rank = []
@@ -425,6 +442,8 @@ def get_w_rank(sort="avg",rev=True):
                 TeamRankings.w_rank.append([team.Scores.minWScore,team.number])
 
     TeamRankings.w_rank.sort(reverse=rev)
+
+    return TeamRankings.w_rank
 
 def get_wo_rank(sort="avg",rev=True):
 
@@ -443,6 +462,8 @@ def get_wo_rank(sort="avg",rev=True):
 
     TeamRankings.wo_rank.sort(reverse=rev)
 
+    return TeamRankings.wo_rank
+
 def get_wd_rank(sort="avg",rev=True):
 
     TeamRankings.wd_rank = []
@@ -460,6 +481,8 @@ def get_wd_rank(sort="avg",rev=True):
 
     TeamRankings.wd_rank.sort(reverse=rev)
 
+    return TeamRankings.wd_rank
+
 def get_wa_rank(sort="avg",rev=True):
 
     TeamRankings.wa_rank = []
@@ -476,3 +499,5 @@ def get_wa_rank(sort="avg",rev=True):
                 TeamRankings.wa_rank.append([team.Scores.minWAScore,team.number])
 
     TeamRankings.wa_rank.sort(reverse=rev)
+
+    return TeamRankings.wa_rank

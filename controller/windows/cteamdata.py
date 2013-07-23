@@ -8,6 +8,10 @@ import sys
 sys.path.append("../../")
 from model.team import *
 
+#------------------------------------------------------------------------------
+# TeamDataController Class
+#   -- contains information for setting and getting data and display values
+#------------------------------------------------------------------------------
 class TeamDataController():
     """Class that handles commands from the teamdata window."""
 
@@ -99,14 +103,23 @@ class TeamDataController():
         self.image = PhotoImage(file=image_name)
         return self.image
 
-    def get_GraphData(self, index, data):
+    def get_GraphData(self, graphType=None):
+        index = None
+        data = None
+        try:
+            graphName = self.dataLabelVals[int(graphType[0])][0]  
+        except:
+            graphName = None
+
+        #find the index and attr name
+        for x, y, z in self.graphVals:
+            if x == graphName:
+                index = y
+                data = z
+                break # do not continue to iterate through the list
         try:
             currentIndex = self.data.getAttr(index)
             return currentIndex.getAttr(data)
         except:
             print "Cannot find data for that graph."
             return None
-        
-        
-            
-        
