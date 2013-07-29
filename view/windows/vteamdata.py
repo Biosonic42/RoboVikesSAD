@@ -7,8 +7,7 @@ from Tkinter import *
 import sys
 sys.path.append("../../")
 from controller.windows import cteamdata
-from view import vlreg
-from controller import clreg
+from view.customs import lreg
 
 #------------------------------------------------------------------------------
 # TeamData Class
@@ -26,9 +25,7 @@ class TeamData(Frame):
         print self.graphData
 
         if self.graphData:
-            self.graphController = clreg.LregController()
-            self.graph = vlreg.Lreg(self.graphFrame, self.graphData,
-                                    controller=self.graphController)
+            self.graph = lreg.Lreg(self.graphFrame, self.graphData)
             self.graph.pack()
         
     def show(self):   
