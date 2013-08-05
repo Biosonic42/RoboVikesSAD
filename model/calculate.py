@@ -2,6 +2,9 @@
 # calculate module
 #   -- functions for handling data input, output, and caclulations
 #------------------------------------------------------------------------------
+import math
+from statlib import stats
+
 from team import *
 from entry import *
 from match import *
@@ -501,3 +504,78 @@ def get_wa_rank(sort="avg",rev=True):
     TeamRankings.wa_rank.sort(reverse=rev)
 
     return TeamRankings.wa_rank
+
+#------------------------------------------------------------------------------
+# predict functions
+#   -- calculates predicted alliance scores predicts match outcomes
+#------------------------------------------------------------------------------
+def predict_scores(team1=None,team2=None,team3=None):
+    pOff1 = float(team1.pOff.rstrip("%"))/100
+    pOff2 = float(team2.pOff.rstrip("%"))/100
+    pOff3 = float(team3.pOff.rstrip("%"))/100
+    pDef1 = float(team1.pDef.rstrip("%"))/100
+    pDef2 = float(team2.pDef.rstrip("%"))/100
+    pDef3 = float(team3.pDef.rstrip("%"))/100
+    pAst1 = float(team1.pAst.rstrip("%"))/100
+    pAst2 = float(team2.pAst.rstrip("%"))/100
+    pAst3 = float(team3.pAst.rstrip("%"))/100
+    try:
+        offScore = ((team1.avgOff*pOff1)+(team2.avgOff*pOff2)+(team3.avgOff*pOff3))
+        defScore = ((team1.avgDef*pDef1)+(team2.avgDef*pDef2)+(team3.avgDef*pDef3))
+        astScore = ((team1.avgAst*pAst1)+(team2.avgAst*pAst2)+(team3.avgAst*pAst3))
+    except:
+        offScore = 0
+        defScore = 0
+        astScore = 0
+
+    expectedScores = [offScore, defScore, astScore]
+
+    return expectedScores
+
+def predict_outcome(teams=[]):
+
+    team1 = teams[0]
+    team2 = teams[1]
+    team3 = teams[2]
+    team4 = teams[3]
+    team5 = teams[4]
+    team6 = teams[5]
+
+    # standard deviations
+    Sigmas = [[],[],[],[],[],[]]
+
+    for score in team1.Scores.tScores:
+        Sigmas[0].append(((score-team1.avgTotal)**2)/len(team1.Scores.tScores))
+    for score in team2.Scores.tScores:
+        Sigmas[1].append(((score-team2.avgTotal)**2)/len(team2.Scores.tScores))
+    for score in team3.Scores.tScores:
+        Sigmas[2].append(((score-team3.avgTotal)**2)/len(team3.Scores.tScores))
+    for score in team4.Scores.tScores:
+        Sigmas[3].append(((score-team4.avgTotal)**2)/len(team4.Scores.tScores))
+    for score in team5.Scores.tScores:
+        Sigmas[4].append(((score-team5.avgTotal)**2)/len(team5.Scores.tScores))
+    for score in team6.Scores.tScores:
+        Sigmas[5].append(((score-team6.avgTotal)**2)/len(team6.Scores.tScores))
+
+    r1 = math.sqrt(sum(Sigmas[0]))
+    r2 = math.sqrt(sum(Sigmas[1]))
+    r3 = math.sqrt(sum(Sigmas[2]))
+    b1 = math.sqrt(sum(Sigmas[3]))
+    b2 = math.sqrt(sum(Sigmas[4]))
+    b3 = math.sqrt(sum(Sigmas[5]))
+    
+    mur = (float(1)/3)*(team1.avgTotal+team2.avgTotal+team3.avgTotal)
+    mub = (float(1)/3)*(team4.avgTotal+team5.avgTotal+team6.avgTotal)
+    
+    rst = math.sqrt((float(1)/float(9))*(r1**2+r2**2+r3**2))
+    bst = math.sqrt((float(1)/float(9))*(b1**2+b2**2+b3**2))
+    
+    if mur > mub:
+        zval = (mur-mub)/math.sqrt((rst**2)+(bst**2)) if math.sqrt((rst**2)+(bst**2)) > 0 else 0
+        perr = stats.lzprob(zval)
+        return "Red Alliance: " + str(100*perr)
+    
+    else:
+        zval = (mub-mur)/math.sqrt((rst**2)+(bst**2)) if math.sqrt((rst**2)+(bst**2)) > 0 else 0
+        perr = stats.lzprob(zval)
+        return "Blue Alliance: " + str(100*perr)

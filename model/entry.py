@@ -56,7 +56,7 @@ class Entry(object):
         self.teleDiscsScored = (self.telePyrDiscs + self.teleTopDiscs +
                                 self.teleMidDiscs + self.teleLowDiscs)
         self.autoDiscsScored = (self.autoTopDiscs + self.autoMidDiscs +
-                                self.teleLowDiscs)
+                                self.autoLowDiscs)
         self.teleDiscsPU = self.teleFloorDiscsPU + self.teleStationDiscsPU
 
         self.entries.append(self)

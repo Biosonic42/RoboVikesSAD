@@ -91,7 +91,7 @@ class Search(Frame):
 
             self.searchEntryVar = StringVar()
             self.searchEntryVar.set("-30")
-            self.searchEntry = Entry(self.entryFrame,textvariable=self.searchEntryVar,width=4)
+            self.searchEntry = Entry(self.entryFrame,textvariable=self.searchEntryVar,width=4,takefocus=True)
             self.searchEntry.bind("<Return>",lambda event, value=self.searchEntryVar,index=x:self.updateMatches(event,value,index))
             self.searchEntry.pack(side=LEFT,padx=5)
 

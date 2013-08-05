@@ -100,6 +100,7 @@ class SearchController():
                     break
                     
         team.Team.wanted = newList
+        self.wantedList = team.Team.wanted
         
     def __init__(self):
         self.matchedList = team.Team.team_list
