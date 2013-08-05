@@ -4,10 +4,7 @@
 #------------------------------------------------------------------------------
 from Tkinter import *
 
-import sys
-sys.path.append("../../")
 from model import team
-#from model import alliances
 from model import calculate
 
 #------------------------------------------------------------------------------

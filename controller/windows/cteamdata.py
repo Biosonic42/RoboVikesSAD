@@ -4,8 +4,6 @@
 #------------------------------------------------------------------------------
 from Tkinter import *
 
-import sys
-sys.path.append("../../")
 from model.team import *
 
 #------------------------------------------------------------------------------
@@ -97,11 +95,11 @@ class TeamDataController():
     # gets the image file corresponding to self.teamNum and returns it
     # if team is not found: returns nopic.gif
     def get_PhotoImage(self):
-        image_name = "../../Images/" + str(self.teamNum) + ".gif"
+        image_name = "Images/" + str(self.teamNum) + ".gif"
         try:
             open(image_name)
         except:
-            self.image = PhotoImage(file="../../Images/nopic.gif")
+            self.image = PhotoImage(file="Images/nopic.gif")
             return self.image
         
         self.image = PhotoImage(file=image_name)

@@ -5,8 +5,6 @@
 from Tkinter import *
 import re
 
-import sys
-sys.path.append("../../")
 from controller.windows import cranking
 from controller.windows import cteamdata
 from view.windows import vteamdata

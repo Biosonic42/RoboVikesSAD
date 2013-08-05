@@ -7,8 +7,6 @@ import tkSimpleDialog
 import tkMessageBox
 import re
 
-import sys
-sys.path.append("../../")
 from controller.windows import ccompare
 
 #------------------------------------------------------------------------------
@@ -213,14 +211,14 @@ class Compare(Frame):
         self.redAlliance = Frame(self,relief=RAISED,bd=2)
         self.redAlliance.pack(side=TOP,padx=30,pady=15)
 
-        self.redPrediction = Frame(self.redAlliance)
-        self.redPrediction.pack(side=RIGHT,padx=45,pady=15)
+        self.redPrediction = Frame(self)
+        self.redPrediction.pack(side=TOP,padx=45,pady=15)
         
         self.blueAlliance = Frame(self,relief=RAISED,bd=2)
         self.blueAlliance.pack(side=TOP,padx=30,pady=15)
         
-        self.bluePrediction = Frame(self.blueAlliance)
-        self.bluePrediction.pack(side=RIGHT,padx=45,pady=15)
+        self.bluePrediction = Frame(self)
+        self.bluePrediction.pack(side=TOP,padx=45,pady=15)
 
         self.create_AllianceOptions()
         self.create_AllianceTeamEntries()

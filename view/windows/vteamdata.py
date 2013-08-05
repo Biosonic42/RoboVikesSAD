@@ -4,8 +4,6 @@
 #------------------------------------------------------------------------------
 from Tkinter import *
 
-import sys
-sys.path.append("../../")
 from controller.windows import cteamdata
 from view.customs import lreg
 
@@ -117,7 +115,7 @@ class TeamData(Frame):
         self.teamNum.set(team)
 
         self.parent.title("TeamData")
-        self.parent.geometry("650x750")
+        #self.parent.geometry("650x750")
         Frame.__init__(self, parent)
         self.pack()
         self.startup()

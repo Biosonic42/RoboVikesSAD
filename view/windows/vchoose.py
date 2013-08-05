@@ -6,8 +6,6 @@ from Tkinter import *
 import tkMessageBox
 import re
 
-import sys
-sys.path.append("../../")
 from controller.windows import cchoose
 from controller.windows import cteamdata
 from view.windows import vteamdata
