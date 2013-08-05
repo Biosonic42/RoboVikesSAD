@@ -238,6 +238,14 @@ class Team(object):
         self.team_list.append(self)
         self.available.append(self)
 
+        # a few of the final details predefined so as to satisfy predictions with null teams
+        self.avgOff = 0
+        self.avgDef = 0
+        self.avgAst = 0
+        self.pOff = 0
+        self.pDef = 0
+        self.pAst = 0
+        
     def get_primary_details(self): # gets the offensive values of Team
         self.Info.get_more_info()
         self.Scores.get_avgOff_scores(len(self.Info.matches),
@@ -273,18 +281,20 @@ class Team(object):
         self.pOtherStrat = str(int(100*self.Info.otherAutoStrat)/len(matches)) + "%"
         self.avgAutoScore = round(self.Scores.avgAutoScore,2)
         self.avgAutoPickUp = round(self.Info.avgAutoDiscsPU,2)
+        self.avgAutoDiscsScored = round(self.Info.avgAutoDiscsScored,2)
         self.avgAutoTopDiscs = round(self.Info.avgAutoTopScored,2)
         self.avgAutoMidDiscs = round(self.Info.avgAutoMidScored,2)
         self.avgAutoLowDiscs = round(self.Info.avgAutoLowScored,2)
         self.avgAutoDiscsPU = round(self.Info.avgAutoDiscsPU,2)
 
         self.pWasDisabled = str(int(100*self.Info.disabled)/len(matches)) + "%"
-        self.avgDisabled = str(sum(self.Info.disabledState)/len(self.Info.disabledState))
+        self.avgDisabled = round((sum(self.Info.disabledState)/len(self.Info.disabledState)),3)
         self.totalDisabled = self.Info.disabledCount
         self.avgTotalPickUp = round(self.Info.avgDiscsPU,2)
         self.avgFloorPickUp = round(self.Info.avgFloorDiscsPU,2)
         self.avgStationPickUp = round(self.Info.avgStationDiscsPU,2)
         self.avgTeleScore = round(self.Scores.avgTeleScore,2)
+        self.avgTeleDiscsScored = round(self.Info.avgDiscsScored,2)
         self.avgTelePyrDiscs = round(self.Info.avgTelePyrScored,2)
         self.avgTeleTopDiscs = round(self.Info.avgTeleTopScored,2)
         self.avgTeleMidDiscs = round(self.Info.avgTeleMidScored,2)
@@ -298,8 +308,7 @@ class Team(object):
 
         self.avgRegFoul = round(self.Info.avgRegFoul,2)
         self.avgTechFoul = round(self.Info.avgTechFoul,2)
-        self.pDefensive = str(int(100*self.Info.numDef)/len(matches)) + "%"
-        self.pAssistive = str(int(100*self.Info.numAst)/len(matches)) + "%"
+        self.avgFoulScore = round(self.Scores.avgFoulScore,2)
         self.pYellow = str(int(100*self.Info.hadYellow)/len(matches)) + "%"
         self.pRed = str(int(100*self.Info.hadRed)/len(matches)) + "%"
 
