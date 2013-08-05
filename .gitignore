@@ -38,6 +38,6 @@ Thumbs.db
 
 # My own ignores #
 ##################
-Images/*.gif
+*/Images/*.gif
 *.pyc
-data.txt
+*/data.txt
