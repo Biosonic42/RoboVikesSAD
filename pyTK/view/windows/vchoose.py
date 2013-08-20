@@ -34,9 +34,9 @@ class Choose(Frame):
             number = re.search('Team (.*)', data).group(1)
         except AttributeError:
             number = ""
-        newWindow = Toplevel(self)
+        newWindow = Toplevel(self.grandParent)
         tdc = cteamdata.TeamDataController()
-        teamdata = vteamdata.TeamData(newWindow,tdc,number)
+        teamdata = vteamdata.TeamData(newWindow,self,tdc,number)
 
     def checkSelections(self):
         selected = []
@@ -181,9 +181,10 @@ class Choose(Frame):
 
         self.pollList()
 
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, grandParent=None, controller=None):
         self.controller = controller
         self.parent = parent
+        self.grandParent = grandParent
         self.alliances = []
         self.current = None
 

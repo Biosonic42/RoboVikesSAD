@@ -106,10 +106,11 @@ class TeamData(Frame):
         self.button.config(command=self.load)
         self.button.pack(side=LEFT,padx=5)
         
-    def __init__(self, parent=None, controller=None, team=""):
+    def __init__(self, parent=None, grandParent=None, controller=None, team=""):
         self.shown = False
-        self.controller=controller
-        self.parent=parent
+        self.controller = controller
+        self.parent = parent
+        self.grandParent = grandParent
         self.graphData = None
         self.teamNum = StringVar()
         self.teamNum.set(team)

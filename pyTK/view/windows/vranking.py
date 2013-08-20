@@ -15,8 +15,9 @@ from view.windows import vteamdata
 #------------------------------------------------------------------------------
 class _Listing(Frame):
 
-    def __init__(self,parent=None,kind="None"):
+    def __init__(self,parent=None,grandParent=None,kind="None"):
         self.parent = parent
+        self.grandParent = grandParent
         self.controller = cranking.RankingController()
         
         Frame.__init__(self,parent,relief=RAISED,bd=2)
@@ -30,9 +31,9 @@ class _Listing(Frame):
             number = re.search('Team (.*):', data).group(1)
         except AttributeError:
             number = ""
-        newWindow = Toplevel(self)
+        newWindow = Toplevel(self.grandParent)
         tdc = cteamdata.TeamDataController()
-        teamdata = vteamdata.TeamData(newWindow,tdc,number)
+        teamdata = vteamdata.TeamData(newWindow,self,tdc,number)
 
     def hide_rankings(self,event=None):
         try:
@@ -143,12 +144,13 @@ class Ranking(Frame):
 
     def create_newListing(self,kind="None"):
         # create a basic rankingList
-        self.newListing = _Listing(self)
+        self.newListing = _Listing(self,self.grandParent)
         self.newListing.pack()
         
-    def __init__(self,parent=None,controller=None,kind="None"):
-        self.controller=controller
-        self.parent=parent
+    def __init__(self,parent=None,grandParent=None,controller=None,kind="None"):
+        self.controller = controller
+        self.parent = parent
+        self.grandParent = grandParent
 
         self.parent.title("Ranking")
         Frame.__init__(self, parent)

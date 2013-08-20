@@ -239,8 +239,9 @@ class Compare(Frame):
         self.clearButton.pack(side=RIGHT,padx=5,pady=5)
         self.predictButton.pack(side=RIGHT,padx=5,pady=5)
 
-    def __init__(self,parent=None,controller=None):
+    def __init__(self, parent=None, grandParent=None, controller=None):
         self.parent = parent
+        self.grandParent = grandParent
         self.controller = controller
         self.rVals = [[],[],[]]
         self.bVals = [[],[],[]]

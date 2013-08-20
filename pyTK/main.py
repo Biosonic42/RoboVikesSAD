@@ -20,7 +20,7 @@ class App(Frame):
         if self.imported:
             newWindow = Toplevel(self)
             controller = cteamdata.TeamDataController()
-            teamdata = vteamdata.TeamData(newWindow,controller)
+            teamdata = vteamdata.TeamData(newWindow,self,controller)
         else:
             tkMessageBox.showinfo("Warning","No data has been imported.")
 
@@ -28,7 +28,7 @@ class App(Frame):
         if self.imported:
             newWindow = Toplevel(self)
             controller = cranking.RankingController()
-            ranking = vranking.Ranking(newWindow,controller)
+            ranking = vranking.Ranking(newWindow,self,controller)
         else:
             tkMessageBox.showinfo("Warning","No data has been imported.")
 
@@ -36,7 +36,7 @@ class App(Frame):
         if self.imported:
             newWindow = Toplevel(self)
             controller = csearch.SearchController()
-            search = vsearch.Search(newWindow,controller)
+            search = vsearch.Search(newWindow,self,controller)
         else:
             tkMessageBox.showinfo("Warning","No data has been imported.")
         
@@ -44,7 +44,7 @@ class App(Frame):
         if self.imported:
             newWindow = Toplevel(self)
             controller = ccompare.CompareController()
-            compare = vcompare.Compare(newWindow,controller)
+            compare = vcompare.Compare(newWindow,self,controller)
         else:
             tkMessageBox.showinfo("Warning","No data has been imported.")
 
@@ -52,7 +52,7 @@ class App(Frame):
         if self.imported:
             newWindow = Toplevel(self)
             controller = cchoose.ChooseController()
-            choose = vchoose.Choose(newWindow,controller)
+            choose = vchoose.Choose(newWindow,self,controller)
         else:
             tkMessageBox.showinfo("Warning","No data has been imported.")
 
